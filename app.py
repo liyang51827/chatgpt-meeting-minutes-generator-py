@@ -5,7 +5,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-openai.api_key = os.getenv('OPENAI_API_KEY')
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+WHISPER_ENGINE = os.getenv('WHISPER_ENGINE')
+LANG = os.getenv('LANG')
+ENCODING = os.getenv('ENCODING')
+
+openai.api_key = OPENAI_API_KEY
 
 def convert_mp4_to_mp3(mp4_file_path):
   wav_file_path = os.path.splitext(mp4_file_path)[0] + '.mp3'
@@ -15,12 +20,12 @@ def convert_mp4_to_mp3(mp4_file_path):
 
 def transcribe_audio(wav_file_path):
   with open(wav_file_path, 'rb') as audio_file:
-    transcription = openai.Audio.transcribe("whisper-1", audio_file, language='en')
+    transcription = openai.Audio.transcribe(WHISPER_ENGINE, audio_file, language=LANG)
 
   return transcription.text
 
 def save_transcription_to_file(transcription, output_file_path):
-  with open(output_file_path, 'w', encoding='utf-8') as f:
+  with open(output_file_path, 'w', encoding=ENCODING) as f:
     f.write(transcription)
 
 if __name__ == "__main__":
